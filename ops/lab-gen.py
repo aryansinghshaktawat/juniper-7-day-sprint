@@ -110,6 +110,9 @@ HOST_ADDR="{host_addr}"
 for bridge in $BRIDGES; do
   ip link show "$bridge" >/dev/null 2>&1 || ip link add "$bridge" type bridge
   ip link set "$bridge" up
+  # a Linux bridge drops link-local frames by default; let 802.1X (EAPOL, bit 3) and LLDP (bit 14)
+  # through so access ports can authenticate and neighbours are discovered
+  echo 0x4008 > "/sys/class/net/$bridge/bridge/group_fwd_mask"
 done
 ip addr replace "$HOST_ADDR" dev {mgmt_bridge}
 
