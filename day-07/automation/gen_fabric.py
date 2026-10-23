@@ -64,6 +64,7 @@ def render(node: dict, topo: dict) -> list[str]:
         f"set routing-options router-id {lo}",
         f"set routing-options autonomous-system {ASN}",
         "set protocols ospf area 0.0.0.0 interface lo0.0 passive",
+        "set protocols lldp interface all",  # neighbour discovery for the NMS topology view
     ]
     for ifname, link in ports(topo)[name]:
         lines += [
